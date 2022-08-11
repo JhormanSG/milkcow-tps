@@ -10,38 +10,42 @@ use App\User;
 
 class NovedadAnimalController extends Controller
 {
-    public function index(){
+    public function index()
+    {
 
         $novedades = NovedadAnimalModel::All();
 
-        return view("paginas.novedadesAnimal", array("novedades"=>$novedades));
+        // return view("paginas.novedadesAnimal", array("novedades"=>$novedades));
+        return view("paginas.novedadesAnimal");
     }
 
-    public function agregarNovedadAnimal(){
+    public function agregarNovedadAnimal()
+    {
 
         $vacas = VacaModel::All();
         $usuarios = user::All();
 
-        return view("paginas.agregarNovedadAnimal", array("vacas"=>$vacas, "usuarios"=>$usuarios));
+        return view("paginas.agregarNovedadAnimal", array("vacas" => $vacas, "usuarios" => $usuarios));
     }
 
-    public function show($id_novedades){
-    
+    public function show($id_novedades)
+    {
+
         $vacas = VacaModel::all();
         $usuarios = User::all();
         $novedadA = NovedadAnimalModel::where("id_novedades", $id_novedades)->get();
 
-        if(count($novedadA) != 0){
+        if (count($novedadA) != 0) {
 
-            return view("paginas.editarNovedadAnimal", array("novedadA"=>$novedadA, "vacas"=>$vacas, "usuarios"=>$usuarios));
+            return view("paginas.editarNovedadAnimal", array("novedadA" => $novedadA, "vacas" => $vacas, "usuarios" => $usuarios));
+        } else {
 
-        }else{
-
-            return view("paginas.editarNovedadAnimal", array("estatus"=>404));
-        }       
+            return view("paginas.editarNovedadAnimal", array("estatus" => 404));
+        }
     }
 
-    public function update($id_novedades, Request $request){
+    public function update($id_novedades, Request $request)
+    {
 
         $datos = array(
 
@@ -50,11 +54,10 @@ class NovedadAnimalController extends Controller
             "fecha" => $request->input("fecha"),
             "vaca" => $request->input("vaca"),
             "id_reportero" => $request->input("id_reportero"),
-            "estado_vaca" => $request->input("estado_vaca")
 
         );
 
-        if(!empty($datos)){
+        if (!empty($datos)) {
 
             $novedades = NovedadAnimalModel::where('id_novedades', $id_novedades)->update($datos);
 
@@ -62,84 +65,97 @@ class NovedadAnimalController extends Controller
         }
     }
 
-    public function destroy($id_novedades, Request $request){
+    public function destroy($id_novedades, Request $request)
+    {
 
-        return $novedad = NovedadAnimalModel::where("id_novedades", $id_novedades)->delete();
-
+        return $novedades = NovedadAnimalModel::where("id_novedades", $id_novedades)->delete();
     }
 
-    public function store(Request $request){
+    public function store(Request $request)
+    {
+        $tipo_de_novedad = $request->input("tipo_de_novedad");
+        $Id_animal = $request->input("Id_animal");
 
         $datos = array(
 
-            "tipo_de_novedad" => $request->input("tipo_de_novedad"),
+            "tipo_de_novedad" => $tipo_de_novedad,
             "descripcion" => $request->input("descripcion"),
             "fecha" => $request->input("fecha"),
-            "vaca" => $request->input("vaca"),
+            "vaca" => $Id_animal,
             "id_reportero" => $request->input("id_reportero"),
-            "estado" => $request->input("estado")
 
         );
 
-        if(!empty($datos)){
+        if (!empty($datos)) {
 
             $novedades = NovedadAnimalModel::insert($datos);
 
-            return redirect("/novedades");
-            
-        }
-    }
+            if ($tipo_de_novedad == 'MUERTE') {
 
-    public function buscarNovedades($fechaNovedad, Request $request){
+               $vaca = VacaModel::where('Id_animal', $Id_animal)->update(['estado_vaca'=>'muerta']);
 
-        if($request->ajax()){
-
-            if($fechaNovedad === '-'){
-
-                $novedad = NovedadAnimalModel::join('vaca','novedades.vaca','=', 'vaca.Id_animal')
-                ->join('users', 'novedades.id_reportero','=', 'users.id')
-                ->get();
-
-                return $novedad;
-            }else{
-
-                $novedad = NovedadAnimalModel::where('fecha', $fechaNovedad)
-                ->join('users', 'novedades.id_reportero', '=', 'users.id')
-                ->join('vaca', 'novedades.vaca', '=', 'vaca.Id_animal')
-                ->get();
-
-                return $novedad;
+                
             }
 
+            return redirect("/novedades");
         }
-     }
-
-     
-     public function buscarNovedadesVaca($nombreVaca, Request $request){
+    }
+    public function buscarNovedades($fechaNovedad, Request $request)
+    {
 
         // if($request->ajax()){
 
-            if($nombreVaca === '-'){
+        if ($fechaNovedad === '-') {
 
-                $novedad = NovedadAnimalModel::join('vaca','novedades.vaca','=', 'vaca.Id_animal')
-                ->join('users', 'novedades.id_reportero','=', 'users.id')
+            $novedad = NovedadAnimalModel::join('vaca', 'novedades.vaca', '=', 'vaca.Id_animal')
+                ->join('users', 'novedades.id_reportero', '=', 'users.id')
+                ->orderBy('id_novedades', 'DESC')
                 ->get();
 
-                return $novedad;
-            }else{
+            return $novedad;
+        } else {
 
-                $novedad = NovedadAnimalModel::where('vaca.nombre', 'like', '%'.$nombreVaca.'%')
+            $novedad = NovedadAnimalModel::where('fecha', $fechaNovedad)
                 ->join('users', 'novedades.id_reportero', '=', 'users.id')
                 ->join('vaca', 'novedades.vaca', '=', 'vaca.Id_animal')
+                ->orderBy('id_novedades', 'DESC')
                 ->get();
 
-                return $novedad;
-            }
-
+            return $novedad;
         }
+
+        //}
+    }
+
+
+    public function buscarNovedadesVaca($nombreVaca, Request $request)
+    {
+
+        // if($request->ajax()){
+
+        if ($nombreVaca === '-') {
+
+            $novedad = NovedadAnimalModel::join('vaca', 'novedades.vaca', '=', 'vaca.Id_animal')
+                ->join('users', 'novedades.id_reportero', '=', 'users.id')
+                ->orderBy('id_novedades', 'DESC')
+                ->get();
+
+            return $novedad;
+        } else {
+
+            $novedad = NovedadAnimalModel::where('vaca.nombre', 'like', '%' . $nombreVaca . '%')
+                ->join('users', 'novedades.id_reportero', '=', 'users.id')
+                ->join('vaca', 'novedades.vaca', '=', 'vaca.Id_animal')
+                ->orderBy('id_novedades', 'DESC')
+                ->get();
+
+            return $novedad;
+        }
+    }
     //  }
 
-    public function contarNovedades(){
+    public function contarNovedades()
+    {
 
         $cantidadNovedades = NovedadAnimalModel::count();
 

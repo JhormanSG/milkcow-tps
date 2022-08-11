@@ -121,26 +121,6 @@
                             </div>
                         </div>
 
-                        <div class="form-group row">
-                            <label for="estado" class="col-md-4 col-form-label text-md-right">{{ __('ESTADO')}}</label>
-                                <div class="col-md-6"> 
-                                <select name="estado" id="estado" class="form-control @error('estado') is-invalid @enderror">
-                                
-                                @foreach($vacas as $vaca)
-
-                                <option value="{{ $vaca['estado_vaca']}}"@if($vaca['estado_vaca']==$novedad['estado_vaca']){{ 'selected' }}@endif>{{ $vaca['estado_vaca']}}</option>
-                                
-                                @endforeach
-                            
-                                </select>
-                                @error('estado')
-                                    <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
@@ -157,8 +137,5 @@
     </div>
 </div>
 
-<div id="app" class="content">
-                        <example-componet></example-componet>
-                    </div>
 @endsection
 @endif

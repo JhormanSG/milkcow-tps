@@ -32,21 +32,21 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                @if (isset( Auth::user()->name ))
-                    <!-- Left Side Of Navbar -->
+                @if(isset( Auth::user()->name))
                     <ul class="navbar-nav mr-auto">
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Novedades
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <a class="dropdown-item" href="/novedades">Novedades Animales</a>
-                <a class="dropdown-item" href="/agregarNovedadAnimal">Agregar novedad</a>
-            </li>
-                    </ul>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Novedades
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="/novedades">Lista de novedades</a>
+                                <a class="dropdown-item" href="/agregarNovedadAnimal">Agregar novedad</a>
+                            </div>
+                        </li>
 
-                @endif
+                    </ul>
+                    @endif
 
                     <!-- Right Side Of Navbar -->
                     <ul class="navbar-nav ml-auto">

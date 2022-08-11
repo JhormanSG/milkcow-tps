@@ -11,13 +11,5 @@ class NovedadAnimalModel extends Model
     public function usuarios(){
 
         return $this->belongsTo('App\User', 'id_reportero', 'id');
-
-    }
-
-        
-    public function vacas(){
-
-        return $this->belongsTo('App\VacaModel', 'vaca', 'id_animal');
-
     }
 }

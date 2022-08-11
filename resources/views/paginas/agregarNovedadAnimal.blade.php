@@ -62,7 +62,7 @@
                         <div class="form-group row">
                             <label for="vaca" class="col-md-4 col-form-label text-md-right">{{ __('VACA')}}</label>
                             <div class="col-md-6">
-                                <select name="vaca" id="vaca" class="form-control @error('vaca') is-invalid @enderror">
+                                <select name="Id_animal" id="Id_animal" class="form-control @error('Id_animal') is-invalid @enderror">
 
 
                                     <option value="">Seleccione una...</option>
@@ -107,24 +107,7 @@
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="form-group row">
-                            <label for="estado" class="col-md-4 col-form-label text-md-right">{{ __('ESTADO')}}</label>
-                            <div class="col-md-6">
-                                <select name="estado" id="estado" class="form-control @error('estado') is-invalid @enderror">
-                                    
-                                    <option value="">Seleccione uno...</option>
-                                    <option value="ACTIVO">ACTIVO</option>
-                                    <option value="INACTIVO">INACTIVO</option>
-                                </select>
-                                @error('estado')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                                @enderror
-                            </div>
-                        </div>
-
+                        
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
@@ -139,9 +122,5 @@
         </div>
     </div>
 </div>
-
-<div id="app" class="content">
-                        <example-componet></example-componet>
-                    </div>
 @endsection
-@endif
+@endif 

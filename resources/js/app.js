@@ -33,24 +33,25 @@ const app = new Vue({
     el: '#app',
     data:{
         
-        colorFondo:'',
-        num1: 0,
-        num2: 0,
-        resultado:'',
-        operacion:'',
+        // colorFondo:'',
+        // num1: 0,
+        // num2: 0,
+        // resultado:'',
+        // operacion:'',
         fechaNovedad: '',
-        novedades: [],
         nombreVaca: '',
+        novedades: [],
+        
 
         totalNovedades: 0,
-        novedadesPagina: 3,
-        paginas: '', 
-        paginaActual: 1, 
-        desde: '',
-        hasta: '', 
-        ocultarMostrarAnterior: '',
-        ocultarMostrarSiguiente: '', 
-        botones: [],
+        novedadesPagina: 6,
+        paginasNovedadAnimal: '', 
+        paginaActualNovedadAnimal: 1, 
+        desdeNovedadAnimal: '',
+        hastaNovedadAnimal: '', 
+        ocultarMostrarAnteriorNovedadAnimal: '',
+        ocultarMostrarSiguienteNovedadAnimal: '', 
+        botonesNovedadAnimal: [],
         
     },
     methods:{
@@ -61,47 +62,47 @@ const app = new Vue({
 
                 this.totalNovedades = respuesta.data
 
-                this.paginas = Math.ceil(this.totalNovedades / this.novedadesPagina);
+                this.paginasNovedadAnimal = Math.ceil(this.totalNovedades / this.novedadesPagina);
 
             })
         },
 
         paginar: function(pagina){
 
-            this.paginaActual = pagina;
+            this.paginaActualNovedadAnimal = pagina;
 
-            this.desde = ((this.paginaActual - 1) * this.novedadesPagina);
-            this.hasta = this.paginaActual * this.novedadesPagina;
+            this.desdeNovedadAnimal = ((this.paginaActualNovedadAnimal - 1) * this.novedadesPagina);
+            this.hastaNovedadAnimal = this.paginaActualNovedadAnimal * this.novedadesPagina;
 
-            if(this.paginaActual == 1){
+            if(this.paginaActualNovedadAnimal == 1){
 
-                this.ocultarMostrarAnterior = "page-item disabled";
+                this.ocultarMostrarAnteriorNovedadAnimal = "page-item disabled";
 
             }else{
 
-                this.ocultarMostrarAnterior = "page-item";
+                this.ocultarMostrarAnteriorNovedadAnimal = "page-item";
 
             }
 
 
-            if(this.paginaActual == this.paginas){
+            if(this.paginaActualNovedadAnimal == this.paginasNovedadAnimal){
 
-                this.ocultarMostrarSiguiente = "page-item disabled";
+                this.ocultarMostrarSiguienteNovedadAnimal = "page-item disabled";
 
             }else{
 
-                this.ocultarMostrarSiguiente = "page-item";
+                this.ocultarMostrarSiguienteNovedadAnimal = "page-item";
             }
 
-            for (i = 0; i <= this.paginas; i++){
+            for (i = 0; i <= this.paginasNovedadAnimal; i++){
 
-                if ((i + 1) == this.paginaActual){
+                if ((i + 1) == this.paginaActualNovedadAnimal){
 
-                    this.botones[i] = "page-item active";
+                    this.botonesNovedadAnimal[i] = "page-item active";
 
                 }else{
 
-                    this.botones[i] = "page-item";
+                    this.botonesNovedadAnimal[i] = "page-item";
                 }
 
             }
@@ -109,15 +110,15 @@ const app = new Vue({
 
         anterior: function(){
 
-            this.paginaActual = this.paginaActual - 1;
-            this.paginar(this.paginaActual);
+            this.paginaActualNovedadAnimal = this.paginaActualNovedadAnimal - 1;
+            this.paginar(this.paginaActualNovedadAnimal);
 
         },
 
         siguiente: function(){
 
-            this.paginaActual = this.paginaActual + 1;
-            this.paginar(this.paginaActual);
+            this.paginaActualNovedadAnimal = this.paginaActualNovedadAnimal + 1;
+            this.paginar(this.paginaActualNovedadAnimal);
 
         },
 
@@ -166,10 +167,17 @@ const app = new Vue({
                 
                 axios.get('http://127.0.0.1:8000/novedadAnimalBuscar/'+this.fechaNovedad).then((respuesta)=>{
                     this.novedades = respuesta.data;
+
+                    this.paginasNovedadAnimal = Math.ceil(this.novedades.length / this.novedadesPagina);
+
                 });
             
             }else{
                 axios.get('http://127.0.0.1:8000/novedadAnimalBuscar/-').then((respuesta)=>{this.novedades = respuesta.data;
+                console.log(this.novedades)
+
+                this.paginasNovedadAnimal = Math.ceil(this.novedades.length / this.novedadesPagina);
+
                 });
             } 
         },
@@ -182,11 +190,15 @@ const app = new Vue({
                 
                 axios.get('http://127.0.0.1:8000/novedadAnimalBuscarVaca/'+this.nombreVaca).then((respuesta)=>{
                     this.novedades = respuesta.data;
+
+                    this.paginasNovedadAnimal = Math.ceil(this.novedades.length / this.novedadesPagina);
                 });
             
             }else{
                 axios.get('http://127.0.0.1:8000/novedadAnimalBuscarVaca/-').then((respuesta)=>{this.novedades = respuesta.data;
                 });
+
+                    this.paginasNovedadAnimal = Math.ceil(this.novedades.length / this.novedadesPagina);
             }
         },  
         },
@@ -194,7 +206,7 @@ const app = new Vue({
         mounted(){
 
             this.buscarNovedades()
-            this.buscarNovedadesVaca()
+            //this.buscarNovedadesVaca()
 
             this.buscarNovedades()
             this.consultaNumeroNovedades()

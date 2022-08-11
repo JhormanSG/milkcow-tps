@@ -1,4 +1,3 @@
-@if (isset( Auth::user()->name ))
 @extends('layouts.app')
 
 @section('content')
@@ -34,34 +33,37 @@
                                 <th>FECHA</th>
                                 <th>VACA</th>
                                 <th>REPORTERO</th>
-                                <th>ESTADO</th>
+                                @auth
                                 <th colspan="2">ACCIONES</th>
+                                @endauth
                             </tr>
                         </thead>
 
 
                         <tbody>
 
-                            <tr v-for="(novedad, index) in novedades" v-show="index >= desde && index < hasta">
+                            <tr v-for="(novedad, index) in novedades" v-show="index >= desdeNovedadAnimal && index < hastaNovedadAnimal">
                                 <td>@{{novedad.id_novedades}}</td>
                                 <td>@{{novedad.tipo_de_novedad}}</td>
                                 <td>@{{novedad.descripcion}}</td>
                                 <td>@{{novedad.fecha}}</td>
                                 <td>@{{novedad.nombre}}</td>
                                 <td>@{{novedad.name}}</td>
-                                <td>@{{novedad.estado_vaca}}</td>
-                                <td>
-                                    <div class="btn-group">
+                                @auth
+                                <td> 
+                                <div class="btn-group">
                                         <a class="btn btn-primary" v-bind:href="'http://127.0.0.1:8000/novedades/'+novedad.id_novedades">
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
 
+                                        @if(Auth::user()->type_user == 'Instructor')
                                         <a class="btn btn-danger" href="#" v-on:click="eliminarNovedad(novedad.id_novedades)">
                                             <i class="bi bi-trash3"></i>
                                         </a>
-
+                                        @endif
                                     </div>
-
+                                    </td>
+                                @endauth
                             </tr>
 
 
@@ -72,23 +74,23 @@
 
                     <nav aria-label="Page navigation example">
                         <ul class="pagination">
-                            <li v-bind:class="ocultarMostrarAnterior">
+                            <li v-bind:class="ocultarMostrarAnteriorNovedadAnimal">
                                 <a v-on:click="anterior" class="page-link" href="#" aria-label="Previous">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
 
-                            <li v-for="(pagina, index) in paginas" v-bind:class="botones[index]">                                 
+                            <li v-for="(pagina, index) in paginasNovedadAnimal" v-bind:class="botonesNovedadAnimal[index]">                                 
                                 <a class="page-link" href="#" v-on:click="paginar(pagina)">@{{pagina}}</a>
                             </li>
 
-                            <li v-if="paginas == 1" class="page-item disabled">
+                            <li v-if="paginasNovedadAnimal == 1" class="page-item disabled">
                                 <a class="page-link" href="#" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
 
-                            <li v-else v-bind:class="ocultarMostrarSiguiente">
+                            <li v-else v-bind:class="ocultarMostrarSiguienteNovedadAnimal">
                                 <a v-on:click="siguiente" class="page-link" href="#" aria-label="Next">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
@@ -103,4 +105,3 @@
     </div>
 </div>
 @endsection
-@endif
